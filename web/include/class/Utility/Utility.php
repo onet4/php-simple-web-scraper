@@ -1,6 +1,45 @@
 <?php
+namespace PHPSimpleWebScraper\Utility;
 
 class Utility {
+
+    /**
+     * Used to parse string parameter values such as `load-image=false`.
+     *
+     * If parsed normally string like `true`, `false` will be considered a true value.
+     * This method converts them into a boolean value.
+     *
+     * @param integer|boolean|string $ibsValue
+     * @return boolean
+     */
+    static public function getBoolean( $ibsValue ) {
+        if ( is_bool( $ibsValue ) ) {
+            return $ibsValue;
+        }
+        if ( is_numeric( $ibsValue ) ) {   // includes string numbers
+            return ( boolean ) $ibsValue;
+        }
+        if ( is_string( $ibsValue ) ) {
+            $_sBoolean = strtolower( $ibsValue );
+            return 'false' === $_sBoolean
+                ? false
+                : true;
+        }
+        // for integer and other types.
+        return ( boolean ) $ibsValue;
+    }
+    
+    static public function getOneFromList( $sListFilePath ) {
+
+        $_abList = file( $sListFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
+        if ( empty( $_abList ) ) {
+            return null;
+        }
+        $_aList = $_abList;
+        shuffle( $_aList );
+        return reset($_aList );
+
+    }
 
     static public function getCopyRight( $sCopyRightHolder, $iStartYear=2018 ) {
 
